@@ -40,23 +40,28 @@ public class ZD128958 {
     System.out.println("URL: " + url);
 
     try (Connection conn = DriverManager.getConnection(url)) {
-      final String sql = "SELECT * FROM Nation";
       Statement ps = conn.createStatement();
-
-      String nsql = "UPDATE nation SET n_nationkey = 9996 WHERE n_name LIKE 'A%'";
+      final String nsql = "UPDATE nation SET n_nationkey = 9996 WHERE n_name LIKE 'A%'";
       ResultSet results = ps.executeQuery(nsql);
 
       int rowCount = ps.getUpdateCount();
       System.out.println("incorrect rowcount " + rowCount);
 
+      int countFromResultSet = 0;
       while (results.next()) {
-        System.out.println("(correct) count of rows updated from the resultSet (should be 2) " + results.getInt(1));
+        countFromResultSet = results.getInt(1);
+        System.out.println("correct count  (should be 2) " + countFromResultSet);
       }
 
-      // print rows to prove the update worked.
+      // print rows to prove the update worked and generate INSERTs for Postgres test data
+      System.out.println("CREATE TABLE nation (n_nationkey BIGINT, n_name VARCHAR(50)");
+      final String sql = "SELECT * FROM Nation";
       ResultSet rs = ps.executeQuery(sql);
       while (rs.next()) {
-        System.out.println(rs.getString(1) + " " + rs.getString(2));
+        System.out.println(
+            String.format(
+                "INSERT INTO nations (n_nationkey, n_name) VALUES (%d, '%s')",
+                rs.getInt(1), rs.getString(2)));
       }
 
     } catch (SQLException ex) {
@@ -71,18 +76,6 @@ public class ZD128958 {
     String URL =
         String.format(
             "jdbc:arrow-flight-sql://localhost:31337?useEncryption=true&user=flight_username&password=flight_password&disableCertificateVerification=true");
-
-    return URL;
-  }
-
-  String buildAFURL() {
-    String URL = "jdbc:arrow-flight-sql://localhost:32010/?useEncryption=%s";
-
-    return URL;
-  }
-
-  String buildPostgresqlURL() {
-    String URL = "jdbc:postgresql://localhost:5432/";
 
     return URL;
   }

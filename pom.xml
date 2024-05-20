@@ -31,7 +31,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <log4j2.version>2.19.0</log4j2.version>
-        <arrow.flight.jdbc.driver.version>15.0.2</arrow.flight.jdbc.driver.version>
+        <arrow.flight.jdbc.driver.version>17.0.0-SNAPSHOT</arrow.flight.jdbc.driver.version>
         <dependency-check-maven.version>5.3.2</dependency-check-maven.version>
         <fully.qualified.main.class>com.dremio.ZD128958</fully.qualified.main.class>
     </properties>
